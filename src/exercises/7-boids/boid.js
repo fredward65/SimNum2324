@@ -11,18 +11,56 @@ class Boid {
   separation(others){
     let vec = createVector(0, 0);
     
+    for (let other of others){
+      if(other != this){
+        let dist = this.pos.dist(other.pos);
+        if(dist <= this.view_r){
+          let svec = p5.Vector.sub(this.pos, other.pos);
+          svec.setMag(1 / dist);
+          vec.add(svec);
+        }
+      }
+    }
+    vec.setMag(this.vel);
+
     return vec;
   }
 
   alignment(others){
     let mean = createVector(0, 0);
     
+    let counter = 0;
+    for (let other of others){
+      if(other != this){
+        let dist = this.pos.dist(other.pos);
+        if(dist <= this.view_r){
+          mean.add(other.dir);
+          counter++;
+        }
+      }
+    }
+    mean.div(counter);
+
     return mean;
   }
   
   cohesion(others){
     let mean = createVector(0, 0);
     
+    let counter = 0;
+    for (let other of others){
+      if(other != this){
+        let dist = this.pos.dist(other.pos);
+        if(dist <= this.view_r){
+          mean.add(other.pos);
+          counter++;
+        }
+      }
+    }
+    mean.div(counter);
+    mean.sub(this.pos);
+    mean.setMag(this.vel);
+
     return mean;
   }
 

@@ -1,7 +1,7 @@
 /* Boids, by Craig Reynolds - https://www.red3d.com/cwr/boids/ */
 
 let boids = [];
-let count = 10;
+let count = 100;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
