@@ -1,0 +1,4 @@
+/Support
+src/CMakeLists.txt
+**/__pycache__/
+*.pyc
