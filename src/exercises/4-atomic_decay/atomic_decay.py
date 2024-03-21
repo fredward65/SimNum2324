@@ -18,9 +18,9 @@ def main():
     tau = 0
 
     # Time vector
-    t = np.linspace(0, 1e12, num=1e3)
+    t = np.linspace(0, 1e12, num=1000)
     # Radioactive decay
-    N = N_0
+    N = N_0 * t
 
     t_vec = [t_1_2]
     N_vec = [N_0]
