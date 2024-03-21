@@ -1,7 +1,7 @@
 {
   "name": "SimNum2324",
   "dockerFile": "Dockerfile",
-  "build": {"args": {"ROS_WS":"${localWorkspaceFolderBasename}/exercises/8-robot_arm/"}},
+  "build": {"args": {"ROS_WS":"${localWorkspaceFolderBasename}"}},
   "runArgs": ["--privileged"],
   "workspaceMount": "source=${localWorkspaceFolder}/src,target=/home/vscode/${localWorkspaceFolderBasename}/src,type=bind",
   "workspaceFolder": "/home/vscode/${localWorkspaceFolderBasename}",
