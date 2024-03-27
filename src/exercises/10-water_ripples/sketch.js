@@ -17,10 +17,27 @@ function draw() {
   background(0);
   loadPixels();
 
+  if(frameCount % 600 < 300){
+    let x = int(width/2 + 100 * cos(0.05 * frameCount * PI));
+    let y = int(height/2 + 100 * sin(0.05 * frameCount * PI));
+    let r = 3;
+    for (let i = -r; i <= r; i++){
+      for (let j = -r; j <= r; j++){
+        buffer_2[x + i][y + j] = 255;
+      }
+    }
+  }
+
   // Ripples loop
   for (let i = 1; i < width - 1; i++){
     for (let j = 1; j < height - 1; j++){
       // Buffer update
+      buffer_2[i][j] = (buffer_1[i-1][j] +
+                        buffer_1[i+1][j] +
+                        buffer_1[i][j-1] +
+                        buffer_1[i][j+1])/2 -
+                        buffer_2[i][j];
+      buffer_2[i][j] *= damping;
 
       let idx = 4*i + 4*j*width;
       pixels[idx + 0] = buffer_2[i][j];

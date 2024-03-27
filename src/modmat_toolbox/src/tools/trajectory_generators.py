@@ -28,8 +28,13 @@ def circular_trajectory(p_0:list, radius:float, angle:float, t_f:float=1, n:int=
     # Modify these lines
     x_0 = p_0[0]
     z_0 = p_0[1]
-    x = np.linspace(x_0, x_0, num=n)
-    z = np.linspace(z_0, z_0, num=n) 
+    c_x = x_0 + radius * np.cos(angle)
+    c_z = z_0 + radius * np.sin(angle)
+
+    alpha = np.linspace(angle - np.pi, angle + np.pi, num=n)
+    x = c_x + radius * np.cos(alpha)
+    z = c_z + radius * np.sin(alpha)
+    
     theta = angle * np.ones(n)
     
     trajectory = np.c_[x, z, theta]
@@ -67,11 +72,24 @@ def polygon_trajectory(p_0:list, edges:float, radius:float, angle:float, t_f:flo
     t_vec = np.linspace(0, t_f, num=n)
     
     # Modify these lines
-    x_0 = p_0[0]
-    z_0 = p_0[1]
-    x = np.linspace(x_0, x_0, num=n)
-    z = np.linspace(z_0, z_0, num=n) 
-    theta = angle * np.ones(n)
+    x_0, z_0 = p_0
+
+    c_x = x_0 + radius*np.cos(angle)
+    c_z = z_0 + radius*np.sin(angle)
+    alpha = 2 * np.pi / edges
+    x = []
+    z = []
+    for i in range(edges):
+        x_i = c_x + radius*np.cos(angle - np.pi + (i+1)*alpha)
+        z_i = c_z + radius*np.sin(angle - np.pi + (i+1)*alpha)
+        x.append(np.linspace(x_0, x_i, num=n//edges))
+        z.append(np.linspace(z_0, z_i, num=n//edges))
+        x_0 = x_i
+        z_0 = z_i
+    x = np.array(x).ravel()
+    z = np.array(z).ravel()
+    
+    theta = angle * np.ones(x.shape[0])
     
     trajectory = np.c_[x, z, theta]
     return t_vec, trajectory
