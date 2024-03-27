@@ -9,6 +9,7 @@ let fac = 1000;
 let a_g = 9.80665;
 let th_1, th_2, dth_1, dth_2, ddth_1, ddth_2, dt;
 
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   frameRate(60);

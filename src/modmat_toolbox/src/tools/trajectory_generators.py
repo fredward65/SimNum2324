@@ -42,11 +42,18 @@ def square_trajectory(p_0:list, side:float, angle:float, t_f:float=1, n:int=100)
     """
     t_vec = np.linspace(0, t_f, num=n)
     
-    # Modify these lines
-    x_0 = p_0[0]
-    z_0 = p_0[1]
-    x = np.linspace(x_0, x_0, num=n)
-    z = np.linspace(z_0, z_0, num=n) 
+    p_l = [p_0]
+    x_0, z_0 = p_0 
+    for i in range(3):
+        x_0 += side * np.cos(angle + .5*np.pi*i)
+        z_0 += side * np.sin(angle + .5*np.pi*i)
+        p_l.append([x_0, z_0])
+    p_l.append(p_0)
+
+    l_p = len(p_l) - 1
+    x = np.array([np.linspace(p_l[i][0], p_l[i+1][0], num=n//l_p) for i in range(l_p)]).ravel()
+    z = np.array([np.linspace(p_l[i][1], p_l[i+1][1], num=n//l_p) for i in range(l_p)]).ravel()
+
     theta = angle * np.ones(n)
     
     trajectory = np.c_[x, z, theta]
