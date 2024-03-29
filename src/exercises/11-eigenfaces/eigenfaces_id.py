@@ -71,12 +71,12 @@ def main():
     plt.subplot(1, 2, 2)
     plt.title("Singular values - Cumulative Sum")
     plt.plot(np.cumsum(s), '-x')
-    plt.hlines(.9 * np.sum(s), 0, s.shape[0])
+    plt.hlines(.75 * np.sum(s), 0, s.shape[0])
     plt.tight_layout()
     plt.show()
 
     # Reduced basis from Eigens
-    idx_lim = np.where(np.cumsum(s) < .9 * np.sum(s))[0][-1] + 1
+    idx_lim = np.where(np.cumsum(s) < .75 * np.sum(s))[0][-1] + 1
     u_r = u[:, :idx_lim]
 
     # Project faces on reduced basis
@@ -119,7 +119,7 @@ def main():
         
         show_image(test_face, w_i, 1, "Test Face")
         show_image(matching_face_1, w[idx_1], 3, "Match - Error Norm")
-        show_image(matching_face_2, w[idx_2], 5, "Match - Cross Product")
+        show_image(matching_face_2, w[idx_2], 5, "Match - Dot Product")
 
         plt.show()
     

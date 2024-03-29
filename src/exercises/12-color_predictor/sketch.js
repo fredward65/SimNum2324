@@ -18,7 +18,7 @@ let rule = (r_, g_, b_) => {return (r_ + g_ + b_)/3 > 256/2};
 
 function setup() {
   createCanvas(800, 600);
-  frameRate(3);
+  frameRate(2);
   cols = width / resolution;
   rows = height / resolution;
 
@@ -31,11 +31,11 @@ function setup() {
   const optimizer = tf.train.adam(0.2);
   model.compile({optimizer: optimizer, loss: 'meanSquaredError'});
 
-  for(let i = 0; i < 1; i++){
+  for(let i = 0; i < 100; i++){
     let r_i = random(256);
     let g_i = random(256);
     let b_i = random(256);
-    value_xs.push([r_i, g_i, b_i]);
+    value_xs.push([r_i/255, g_i/255, b_i/255]);
     let ans = rule(r_i, g_i, b_i) ? [1, 0] : [0, 1]
     value_ys.push(ans);
   }
@@ -47,6 +47,7 @@ function setup() {
   
   update();
   predict();
+  // noLoop();
 }
 
 function draw(){
@@ -60,7 +61,7 @@ function update(){
   r = random(256);
   g = random(256);
   b = random(256);
-  xs = tf.tensor2d([[r, g, b]]);
+  xs = tf.tensor2d([[r/255, g/255, b/255]]);
   background(r, g, b);
   noStroke();
   textAlign(CENTER, CENTER);
@@ -90,15 +91,54 @@ function predict(){
     // let y_user = mouseX < width/2 ? [1, 0] : [0, 1];
     // value_ys.push(y_user);
     value_ys.push([1 - floor(true_val / 3), floor(true_val / 3)])
-    value_xs.push([r, g, b]);
+
+    value_xs.push([r/256, g/256, b/256]);
     train_xs = tf.tensor2d(value_xs);
     train_ys = tf.tensor2d(value_ys);
   });
+
+  let model_data = [];
+  for (let elem of model.getWeights()) model_data.push(elem.dataSync());
+  
+  strokeWeight(2);
+  fill(255);
+  let n_in = [[3*width/8,  9*height/12],
+              [3*width/8, 10*height/12],
+              [3*width/8, 11*height/12]];
+  let n_hd = [[width/2,  9*height/12],
+              [width/2, 10*height/12],
+              [width/2, 11*height/12]];
+  let n_ou = [[5*width/8, 11*height/14],
+              [5*width/8, 12*height/14]];           
+  for (let i = 0; i < n_in.length; i++){
+    for (let j = 0; j < n_hd.length; j++){
+      stroke(0, 255 * (model_data[0][i + j*n_hd.length]));
+      line(n_in[i][0], n_in[i][1], n_hd[j][0], n_hd[j][1]);
+    }
+  }
+  for (let i = 0; i < n_hd.length; i++){
+    for (let j = 0; j < n_ou.length; j++){
+      stroke(0, 255 * (model_data[2][i + j*n_ou.length]));
+      line(n_hd[i][0], n_hd[i][1], n_ou[j][0], n_ou[j][1]);
+    }
+  }
+  stroke(0);
+  for (let i = 0; i < n_in.length; i++) circle(n_in[i][0], n_in[i][1], 10);
+  for (let i = 0; i < n_hd.length; i++){
+    fill(255 * model_data[1][i]);
+    circle(n_hd[i][0], n_hd[i][1], 10);
+  }
+  for (let i = 0; i < n_ou.length; i++){
+    fill(255 * model_data[3][i]);
+    circle(n_ou[i][0], n_ou[i][1], 10);
+  }
+  
+  
 }
 
 function train() {
   trainModel().then(result => {
-    console.log(result);
+    console.log(result.params.samples);
   });
 }
 
