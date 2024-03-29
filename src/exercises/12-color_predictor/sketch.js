@@ -18,6 +18,7 @@ let rule = (r_, g_, b_) => {return (r_ + g_ + b_)/3 > 256/2};
 
 function setup() {
   createCanvas(800, 600);
+  frameRate(3);
   cols = width / resolution;
   rows = height / resolution;
 
@@ -46,8 +47,14 @@ function setup() {
   
   update();
   predict();
-  noLoop();
 }
+
+function draw(){
+  update();
+  predict();
+  setTimeout(train, 10);
+}
+
 
 function update(){
   r = random(256);
@@ -87,12 +94,6 @@ function predict(){
     train_xs = tf.tensor2d(value_xs);
     train_ys = tf.tensor2d(value_ys);
   });
-}
-
-function mousePressed(){
-  update();
-  predict();
-  setTimeout(train, 10);
 }
 
 function train() {
