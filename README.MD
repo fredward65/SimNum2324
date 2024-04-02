@@ -39,7 +39,7 @@ où
 
 ### Interface noVNC (fenêtres Python et ROS/Gazebo)
 Pour visualizer l'interface du container, ouvrez l'adresse suivante sur un Simple Browser : \
-`Ctrl+Shift+P > "Simple Browser: Show > "http:\\localhost:6080"` \
+`Ctrl+Shift+P > "Simple Browser: Show" > "http:\\localhost:6080"` \
 Tapez `vscode` pour le mot de passe du noVNC.
 
 #### Lancement du robot
@@ -48,3 +48,22 @@ Tapez `vscode` pour le mot de passe du noVNC.
 2. Pour vérifier le bon fonctionnement du robot, ouvrez un autre terminal et executez : \
 `rosrun modmat_toolbox planar_demo.py` \
 Le robot devra faire un mouvement basique.
+
+### GPT4All sur un Container
+Pour utiliser l'écosystème [GPT4ALL](https://gpt4all.io/index.html) sur Python, créez d'abbord une machine qui le supportera : \
+`Ctrl+Shift+P > "Dev Containers: New Dev Container..." > "Ubuntu"` \
+Le container devra utiliser la version 22.04 ou suppérieure.
+
+#### Utiliser l'API Python GPT4All
+1. Pour installer l'[API Python GPT4All](https://docs.gpt4all.io/gpt4all_python.html), exécutez sur le terminal du container : \
+`pip install gpt4all`
+2. Sur un nouveau fichier Python, tapez comme base :
+```
+from gpt4all import GPT4All
+model = GPT4All(model_name='orca-mini-3b-gguf2-q4_0.gguf')
+with model.chat_session():
+    response = model.generate(prompt='Hello', temp=0)
+    for items in model.current_chat_session:
+        print(items['role'] + ':', items['content'])
+```
+3. Exécutez le ficher Python. Après télécharger le modèle, il devrait répondre votre "Hello".
