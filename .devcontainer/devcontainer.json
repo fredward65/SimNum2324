@@ -23,7 +23,7 @@
   "postCreateCommand": "bash -c \"catkin_make && . $PWD/devel/setup.bash\"",
   "customizations": {
     "vscode": {
-      "extensions": ["ms-python.python", "ritwickdey.liveserver"]
+      "extensions": ["ms-python.python", "ritwickdey.liveserver", "mechatroner.rainbow-csv"]
     }
   }
 }
