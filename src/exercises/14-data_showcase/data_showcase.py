@@ -61,7 +61,7 @@ def main():
     ax = fig.add_subplot(3, 3, (8, 9))
     freq = np.arange(ddz.shape[0])
     four = np.zeros(ddz.shape[0])
-    ax.set_title('Frequential Analysis')
+    ax.set_title('Frequency Analysis')
     ax.plot(freq, four)
 
     plt.tight_layout(pad=1)
