@@ -26,11 +26,14 @@ def get_params(t, x_mes):
         https://docs.scipy.org/doc/scipy/tutorial/optimize.html
         https://hernandis.me/2020/04/05/three-examples-of-nonlinear-least-squares-fitting-in-python-with-scipy.html
     """
-    E = 1
-    tau = 1
-    f = 1
-    phi = 0
-    res = [E, tau, f, phi]
+    def model(params, t):
+        return params[0] * np.exp(-t / params[1]) * np.sin(2*np.pi * params[2] * t + params[3])
+
+    def fn(params):
+        return model(params, t) - x_mes
+
+    guess = [1, 1, 1, 0]
+    res = opt.least_squares(fn, guess).x
     return res
 
 
